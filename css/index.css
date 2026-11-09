@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Liter&family=SN+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+
+:root {
+    --foreground: #fff;
+    --dark-foreground: #7D1727;
+    --invert-foreground: #000;
+    --highlight: #FF9AA5;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+
+    color: var(--foreground);
+    font-family: "SN Pro", sans-serif;
+}
+
+body {
+    width: 100dvw;
+    height: 100dvh;
+
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+
+    background: linear-gradient(255deg, #B92E3A -9.42%, #2A1022 109.8%);
+}
+
+main {
+    width: 80%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.highlight {
+    color: var(--highlight);
+}
+
+nav {
+    background: var(--foreground);
+    color: var(--invert-foreground);
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    margin-top: 32px;
+    padding: 16px 24px;
+    border-radius: 48px;
+    box-shadow: 6px 6px 4px 0 rgba(0, 0, 0, 0.15);
+}
+
+.logo {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.logo h1 {
+    color: var(--invert-foreground);
+}
+
+.logo * {
+    font-family: "Liter", sans-serif;
+}
+
+.logo img {
+    height: 48px;
+    width: 48px;
+}
+
+nav > a {
+    padding: 10px 24px;
+    background: var(--dark-foreground);
+    color: var(--foreground);
+
+    text-decoration: none;
+    border-radius: 24px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+section {
+    margin-top: 64px;
+    flex: 1;
+    min-height: 0;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+section .left {
+    width: 650px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+
+h2 {
+    font-size: 86px;
+    line-height: 86px;
+}
+
+.actions {
+    display: flex;
+    flex-direction: row;
+
+    gap: 20px;
+}
+
+.actions a {
+    padding: 10px 24px;
+    background: var(--foreground);
+    color: var(--dark-foreground);
+
+    text-decoration: none;
+    border-radius: 24px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    line-height: 1;
+}
+
+.actions a.secondary {
+    color: var(--foreground);
+    background: transparent;
+    border: 1px solid #FFF;
+}
+
+section .right {
+    position: relative;
+    width: 480px;
+    margin-top: 32px;
+    overflow: hidden;
+}
+
+section .right img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+}
+
+footer {
+    position: absolute;
+    bottom: 25px;
+    font-size: 12px;
+    opacity: 0.5;
+}
