@@ -104,8 +104,9 @@ section .left {
 }
 
 h2 {
-    font-size: 86px;
-    line-height: 86px;
+    --size: 86px;
+    font-size: var(--size);
+    line-height: var(--size);
 }
 
 .actions {
@@ -157,4 +158,79 @@ footer {
     bottom: 25px;
     font-size: 12px;
     opacity: 0.5;
+}
+
+@media (max-width: 1450px) {
+    section .left {
+        width: 500px;
+    }
+
+    h2 {
+        --size: 64px;
+    }
+}
+
+@media (max-width: 1275px) {
+    section .left {
+        width: 400px;
+    }
+
+    h2 {
+        --size: 48px;
+    }
+
+    .actions > a {
+        font-size: 12px;
+    }
+
+    .actions a svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+@media (max-width: 1140px) {
+    body {
+        height: auto;
+        min-height: 100dvh;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    main {
+        height: auto;
+        min-height: 100dvh;
+    }
+
+    section {
+        flex-direction: column;
+    }
+
+    footer {
+        position: static;
+    }
+
+    section .right {
+        flex: 1 0 auto;
+        min-height: 480px;
+        width: 360px;
+        align-self: center;
+        margin-top: 48px;
+    }
+}
+
+@media (max-width: 700px) {
+    .logo h1 {
+        display: none;
+    }
+}
+
+@media (max-width: 500px) {
+    section .left {
+        width: 100%;
+    }
+
+    nav > a span {
+        display: none;
+    }
 }
