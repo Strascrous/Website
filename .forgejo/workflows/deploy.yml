@@ -9,7 +9,7 @@ jobs:
     build-deploy:
         runs-on: ubuntu-latest
         steps:
-        - uses: actions/checkout@v6
+        - uses: https://code.forgejo.org/actions/checkout@v6
         - name: Install SSH key
           uses: https://github.com/shimataro/ssh-key-action@v2
           with:
