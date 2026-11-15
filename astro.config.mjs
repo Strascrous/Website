@@ -24,7 +24,7 @@ export default defineConfig({
             provider: fontProviders.bunny(),
             name: "SN Pro",
             cssVariable: "--font-sn-pro",
-            weights: ["200 900"]
+            weights: [400, 500, 600, 700, 800, 900]
         },
         {
             provider: fontProviders.bunny(),
