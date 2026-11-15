@@ -1,0 +1,245 @@
+---
+import outlines from "../data/outlines.fr.json";
+
+export interface City {
+    id: string;
+    name: string;
+    lon: number;
+    lat: number;
+}
+
+interface Props {
+    cities: City[];
+    highlight?: string;
+}
+
+const { cities, highlight } = Astro.props;
+
+type Ring = [number, number][];
+type Box = { x: number; y: number; w: number; h: number };
+type Bounds = { minLon: number; maxLon: number; minLat: number; maxLat: number };
+
+const makeProjection = (bounds: Bounds, box: Box) => {
+    const k = Math.cos((((bounds.minLat + bounds.maxLat) / 2) * Math.PI) / 180);
+    const w = (bounds.maxLon - bounds.minLon) * k;
+    const h = bounds.maxLat - bounds.minLat;
+    const scale = Math.min(box.w / w, box.h / h);
+    const ox = box.x + (box.w - w * scale) / 2;
+    const oy = box.y + (box.h - h * scale) / 2;
+    return (lon: number, lat: number): [number, number] => [
+        ox + (lon - bounds.minLon) * k * scale,
+        oy + (bounds.maxLat - lat) * scale,
+    ];
+};
+
+const boundsOf = (rings: Ring[], margin = 0): Bounds => {
+    const pts = rings.flat();
+    return {
+        minLon: Math.min(...pts.map((p) => p[0])) - margin,
+        maxLon: Math.max(...pts.map((p) => p[0])) + margin,
+        minLat: Math.min(...pts.map((p) => p[1])) - margin,
+        maxLat: Math.max(...pts.map((p) => p[1])) + margin,
+    };
+};
+
+const contains = (b: Bounds, c: City) =>
+    c.lon >= b.minLon && c.lon <= b.maxLon && c.lat >= b.minLat && c.lat <= b.maxLat;
+
+const METRO_BOUNDS: Bounds = { minLon: -5.3, maxLon: 9.7, minLat: 41.2, maxLat: 51.2 };
+const width = 1032;
+const metroHeight = 1000;
+const INSET = { size: 170, top: metroHeight + 20, labelGap: 40 };
+const height = INSET.top + INSET.size + INSET.labelGap + 10;
+
+const metroRings = outlines.metropole as Ring[];
+const overseas = outlines.overseas as { id: string; name: string; rings: Ring[] }[];
+const insetGap = (width - overseas.length * INSET.size) / (overseas.length - 1);
+
+const zones = [
+    {
+        id: 'metropole',
+        name: null,
+        rings: metroRings,
+        bounds: METRO_BOUNDS,
+        box: { x: 0, y: 0, w: width, h: metroHeight },
+    },
+    ...overseas.map((o, i) => ({
+        id: o.id,
+        name: o.name,
+        rings: o.rings,
+        bounds: boundsOf(o.rings),
+        box: { x: i * (INSET.size + insetGap), y: INSET.top, w: INSET.size, h: INSET.size },
+    })),
+].map((zone) => {
+    const project = makeProjection(zone.bounds, zone.box);
+    const path = zone.rings
+        .map((ring) =>
+            ring.map(([lon, lat], i) => {
+                const [x, y] = project(lon, lat);
+                return `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`;
+            }).join(' ') + ' Z'
+        )
+        .join(' ');
+
+    const hitBounds = { ...zone.bounds, minLon: zone.bounds.minLon - .1, maxLon: zone.bounds.maxLon + .1, minLat: zone.bounds.minLat - .1, maxLat: zone.bounds.maxLat + .1 };
+    const points = cities.filter((c) => contains(hitBounds, c)).map((c) => {
+        const [x, y] = project(c.lon, c.lat);
+        return { ...c, x, y };
+    });
+    return { ...zone, path, points };
+});
+
+const allPoints = zones.flatMap((z) => z.points);
+const dots = allPoints
+    .filter((c) => c.id !== highlight)
+    .map((c) => ({ ...c, delay: (c.x / width) * 1.2 }));
+
+const featured = allPoints.find((c) => c.id === highlight);
+const featuredPoint = featured && {
+    ...featured,
+    left: (featured.x / width) * 100,
+    top: (featured.y / height) * 100,
+};
+---
+
+<figure class="map" aria-label={`Carte des ${cities.length} villes disponibles`}>
+    <div class="canvas" style={`aspect-ratio: ${width} / ${height};`}>
+        <svg viewBox={`0 0 ${width} ${height}`} role="img">
+            <g class="land">
+                {zones.map((z) => <path d={z.path} />)}
+            </g>
+            <g class="zone-labels">
+                {zones.filter((z) => z.name).map((z) => (
+                    <text x={z.box.x + z.box.w / 2} y={z.box.y + z.box.h + INSET.labelGap}>{z.name}</text>
+                ))}
+            </g>
+            <g class="dots">
+                {dots.map((c) => (
+                    <circle cx={c.x.toFixed(1)} cy={c.y.toFixed(1)} r="6" style={`--delay: ${c.delay.toFixed(2)}s`}>
+                        <title>{c.name}</title>
+                    </circle>
+                ))}
+            </g>
+            {featuredPoint && (
+                <g class="featured">
+                    <circle class="pulse" cx={featuredPoint.x} cy={featuredPoint.y} r="12" />
+                    <circle class="core" cx={featuredPoint.x} cy={featuredPoint.y} r="12">
+                        <title>{featuredPoint.name}</title>
+                    </circle>
+                </g>
+            )}
+        </svg>
+
+        {featuredPoint && (
+            <span class="label" style={`left: ${featuredPoint.left}%; top: ${featuredPoint.top}%;`}>
+                {featuredPoint.name}
+            </span>
+        )}
+    </div>
+</figure>
+
+<style lang="scss">
+    .map {
+        margin: 0;
+    }
+
+    .canvas {
+        position: relative;
+        width: 100%;
+
+        svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+    }
+
+    .land path {
+        fill: rgba(255, 255, 255, .06);
+        stroke: rgba(255, 255, 255, .14);
+        stroke-width: 2;
+        stroke-linejoin: round;
+    }
+
+    .dots circle {
+        fill: $highlight;
+        opacity: .85;
+        transform-box: fill-box;
+        transform-origin: center;
+        transition: transform .2s ease, opacity .2s ease;
+        animation: pop .5s var(--delay) both cubic-bezier(.34, 1.56, .64, 1);
+
+        &:hover {
+            opacity: 1;
+            transform: scale(1.8);
+        }
+    }
+
+    .featured {
+        circle {
+            fill: $fg;
+            transform-box: fill-box;
+            transform-origin: center;
+        }
+
+        .core {
+            stroke: $logo;
+            stroke-width: 5;
+        }
+
+        .pulse {
+            fill: $highlight;
+            animation: pulse 2.4s ease-out infinite;
+        }
+    }
+
+    .label {
+        position: absolute;
+        transform: translate(-100%, -50%);
+        margin-left: -18px;
+        padding: 4px 12px;
+        border-radius: 999px;
+        background: $fg;
+        color: $invert-fg;
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, .2);
+        pointer-events: none;
+    }
+
+    .zone-labels text {
+        fill: $fg;
+        opacity: .6;
+        font-size: 30px;
+        font-weight: 600;
+        text-anchor: middle;
+    }
+
+    @keyframes pop {
+        from {
+            opacity: 0;
+            transform: scale(0);
+        }
+    }
+
+    @keyframes pulse {
+        from {
+            opacity: .6;
+            transform: scale(1);
+        }
+        to {
+            opacity: 0;
+            transform: scale(3.5);
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .dots circle,
+        .featured .pulse {
+            animation: none;
+        }
+    }
+</style>

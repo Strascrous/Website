@@ -7,60 +7,57 @@ import LucideSeparatorVertical from '~icons/lucide/separator-vertical';
 import LucideSunMoon from '~icons/lucide/sun-moon'
 
 import Card from "../components/card.astro";
+
+const features = [
+    {
+        icon: LucideMapPin,
+        title: "Ta ville, ton resto",
+        description: "Plus de 100 villes. Tu choisis la tienne une fois, l’app s’en souvient."
+    },
+    {
+        icon: LucideSeparatorVertical,
+        title: "Resto U’ et cafétérias",
+        description: "Les cafétérias sont séparés des Resto U', pour une navigation plus clair entre les établissements"
+    },
+    {
+        icon: LucideClock,
+        title: "Midi et soir",
+        description: "Un onglet par service : tu sais ce qui t’attend avant même de t’y rendre"
+    },
+    {
+        icon: MaterialSymbolsWidgetsOutline,
+        title: "Widget",
+        description: "Le menu du jour sur ton écran d’accueil, sans même ouvrir l’app."
+    },
+    {
+        icon: LucideBadgeInfo,
+        title: "Horaires et position",
+        description: "Horaires, adresse, accès, moyens de paiement : tout ce qu’il faut savoir avant de partir."
+    },
+    {
+        icon: LucideSunMoon,
+        title: "Thème sombre",
+        description: "Une interface sombre qui ménage tes yeux le soir et reste lisible en pleine journée."
+    }
+]
 ---
 
 <section id="features">
-    <h2 class="highlight">Fonctionnalités</h2>
-    <h3>Tout ce qu’il te faut avant de pousser la porte.</h3>
+    <h2 class="highlight eyebrow">Fonctionnalités</h2>
+    <h3 class="tagline">Tout ce qu’il te faut avant de pousser la porte.</h3>
 
     <div class="grid">
-        <Card
-            icon={LucideMapPin}
-            title="Ta ville, ton resto"
-            description="Plus de 100 villes. Tu choisis la tienne une fois, l’app s’en souvient."
-        />
-        <Card
-            icon={LucideSeparatorVertical}
-            title="Resto U’ et cafétérias"
-            description="Les cafétérias sont séparés des Resto U', pour une navigation plus clair entre les établissements"
-        />
-        <Card
-            icon={LucideClock}
-            title="Midi et soir"
-            description="Un onglet par service : tu sais ce qui t’attend avant même de t’y rendre"
-        />
-        <Card
-            icon={MaterialSymbolsWidgetsOutline}
-            title="Widget"
-            description="Le menu du jour sur ton écran d’accueil, sans même ouvrir l’app."
-        />
-        <Card
-            icon={LucideBadgeInfo}
-            title="Horaires et position"
-            description="Horaires, adresse, accès, moyens de paiement : tout ce qu’il faut savoir avant de partir."
-        />
-        <Card
-            icon={LucideSunMoon}
-            title="Thème sombre"
-            description="Une interface sombre qui ménage tes yeux le soir et reste lisible en pleine journée."
-        />
+        {features.map(({ icon, title, description }) => (
+            <Card
+                icon={icon}
+                title={title}
+                description={description}
+            />
+        ))}
     </div>
 </section>
 
 <style lang="scss">
-    h2 {
-        text-transform: uppercase;
-        letter-spacing: 1.1;
-        font-size: 15px;
-        font-weight: 700;
-    }
-
-    h3 {
-        font-size: 48px;
-        font-weight: 800;
-        width: 640px;
-    }
-
     .grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);

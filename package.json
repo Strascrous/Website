@@ -9,9 +9,11 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "generate:outlines:fr": "node scripts/generate-outlines.fr.mjs"
   },
   "dependencies": {
+    "@strascrous/data": "github:Strascrous/Data#generated/ts",
     "astro": "^7.4.12",
     "sass": "^1.108.2"
   },

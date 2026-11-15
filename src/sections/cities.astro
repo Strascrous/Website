@@ -1,0 +1,90 @@
+---
+import Map from "../components/map.astro";
+import { cities } from "@strascrous/data";
+import outlines from "../data/outlines.fr.json";
+
+const stats = [
+    { value: cities.length, label: "communes" },
+    { value: new Set(cities.map((c) => c.academy)).size, label: "académies" },
+    { value: outlines.overseas.length, label: "territoires d’Outre-mer" },
+];
+---
+
+<section id="cities">
+    <div class="container">
+        <div class="left">
+            <h2 class="highlight eyebrow">Partout en France</h2>
+            <h3 class="tagline">Né à Strasbourg, disponible partout</h3>
+            <p>À la base faite pour Strasbourg, l’application s’est ouverte à tout le pays : choisis ta ville, ton Resto U’ est là.</p>
+
+            <dl class="stats">
+                {stats.map(({ value, label }) => (
+                    <div class="stat">
+                        <dt>{label}</dt>
+                        <dd>{value}</dd>
+                    </div>
+                ))}
+            </dl>
+        </div>
+        <div class="right">
+            <Map cities={cities} highlight="strasbourg" />
+        </div>
+    </div>
+</section>
+
+<style lang="scss">
+    .container {
+        display: flex;
+        align-items: center;
+        gap: 56px;
+        padding: 56px;
+        background: rgba(255, 255, 255, .08);
+        border-radius: 36px;
+    }
+
+    .left {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+
+        p {
+            max-width: 640px;
+        }
+    }
+
+    .stats {
+        display: flex;
+        gap: 40px;
+        margin-top: 16px;
+    }
+
+    .stat {
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 4px;
+
+        & + & {
+            padding-left: 40px;
+            border-left: 1px solid rgba(255, 255, 255, .15);
+        }
+
+        dd {
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1;
+            color: $highlight;
+        }
+
+        dt {
+            font-size: 15px;
+            opacity: .7;
+        }
+    }
+
+    .right {
+        flex: 1;
+        min-width: 0;
+        max-width: 448px;
+        margin-left: auto;
+    }
+</style>
