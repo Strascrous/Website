@@ -1,0 +1,57 @@
+---
+import { Font } from "astro:assets";
+
+import "../styles/globals.scss";
+import Navbar from "../components/navbar.astro";
+---
+
+<html lang="en">
+	<head>
+	    <Font cssVariable="--font-sn-pro" />
+		<Font cssVariable="--font-liter" />
+
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Astro</title>
+	</head>
+	<body>
+	    <main>
+			<Navbar />
+			<slot />
+		</main>
+	</body>
+</html>
+
+<style lang="scss">
+    body {
+        width: 100dvw;
+        min-height: 100dvh;
+
+        display: flex;
+        justify-content: center;
+        overflow-x: hidden;
+
+        background: #2A1022;
+
+        &::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+
+            background: linear-gradient(255deg, #B92E3A -9.42%, #2A1022 109.8%);
+        }
+    }
+
+    main {
+        width: 80%;
+        height: 100%;
+
+        display: flex;
+        flex-direction: column;
+    }
+</style>

@@ -1,0 +1,120 @@
+---
+import { Image } from "astro:assets";
+import Mockup from "../assets/mockup.png";
+---
+
+<section>
+    <div class="left">
+        <h2>Ton Resto U’ dans ta <span class="highlight">poche</span>.</h2>
+        <p>
+            Les infos de ton Resto U’ à portée de main : tu sélectionnes ta ville, ton Resto U’, et te voila avec tout ce qu’il te faut !
+        </p>
+
+        <div class="actions">
+            <a href="#">Télécharger l'application</a>
+            <a href="https://github.com/Strascrous/App">Voir sur GitHub</a>
+        </div>
+    </div>
+    <div class="right">
+        <Image
+            src={Mockup}
+            alt="Écran de Strascrous affichant le menu du Resto U' Illkirch"
+            widths={[320, 480, 640, 969]}
+            sizes="(max-width: 900px) 70vw, 40vw"
+            loading="eager"
+            fetchpriority="high"
+        />
+    </div>
+</section>
+
+<style lang="scss">
+    section {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .left {
+        width: 650px;
+
+        display: flex;
+        flex-direction: column;
+        gap: 35px;
+
+        h2 {
+            --size: 86px;
+            font-size: var(--size);
+            line-height: var(--size);
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+
+            a {
+                padding: 12px 32px;
+                text-decoration: none;
+                border-radius: 999px;
+
+                &:first-child {
+                    background: $fg;
+                    color: $invert-fg;
+                }
+
+                &:last-child {
+                    border: $fg 1px solid;
+                }
+            }
+        }
+    }
+
+    .right {
+        flex: 1;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+
+        position: relative;
+        top: 6dvh;
+        right: 2dvw;
+
+        &::before {
+            content: "";
+            position: absolute;
+            right: 0;
+            width: min(100%, 35dvh);
+            aspect-ratio: 1 / 2;
+            margin-right: 2%;
+            background: radial-gradient(closest-side, rgba($highlight, 0.35), transparent);
+            filter: blur(40px);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+            max-height: 70dvh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.45))
+                drop-shadow(0 0 25px rgba($highlight, 0.15));
+            animation: float 6s ease-in-out infinite;
+        }
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(-2deg); }
+        50% { transform: translateY(-12px) rotate(-1deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .right img {
+            animation: none;
+            transform: rotate(-2deg);
+        }
+    }
+</style>
