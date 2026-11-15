@@ -16,6 +16,8 @@
     "sass": "^1.108.2"
   },
   "devDependencies": {
-    "@types/node": "^26.6.6"
+    "@iconify/json": "^2.2.557",
+    "@types/node": "^26.6.6",
+    "unplugin-icons": "^24.0.0"
   }
 }

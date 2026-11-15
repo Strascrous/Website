@@ -4,6 +4,7 @@
 
     color: $fg;
     font-family: $font-sn-pro;
+    scroll-behavior: smooth;
 }
 
 .highlight {
@@ -11,6 +12,12 @@
 }
 
 section {
-    width: 100%;
-    min-height: 100dvh;
+    &#hero {
+        width: 100%;
+        min-height: 100dvh;
+    }
+
+    &:not(#hero) {
+        padding: 128px 0;
+    }
 }

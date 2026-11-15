@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig, fontProviders } from 'astro/config';
+import Icons from 'unplugin-icons/vite'
 import { fileURLToPath } from 'node:url';
 
 const variables = fileURLToPath(new URL('./src/styles/variables.scss', import.meta.url));
@@ -13,7 +14,10 @@ export default defineConfig({
                     additionalData: `@use "${variables.replaceAll('\\', '/')}" as *;`
                 }
             }
-        }
+        },
+        plugins: [
+            Icons({ compiler: 'astro' }),
+        ],
     },
     fonts: [
         {

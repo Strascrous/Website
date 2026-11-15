@@ -1,0 +1,73 @@
+---
+import LucideMapPin from '~icons/lucide/map-pin';
+import LucideClock from '~icons/lucide/clock';
+import MaterialSymbolsWidgetsOutline from '~icons/material-symbols/widgets-outline';
+import LucideBadgeInfo from '~icons/lucide/badge-info';
+import LucideSeparatorVertical from '~icons/lucide/separator-vertical';
+import LucideSunMoon from '~icons/lucide/sun-moon'
+
+import Card from "../components/card.astro";
+---
+
+<section id="features">
+    <h2 class="highlight">Fonctionnalités</h2>
+    <h3>Tout ce qu’il te faut avant de pousser la porte.</h3>
+
+    <div class="grid">
+        <Card
+            icon={LucideMapPin}
+            title="Ta ville, ton resto"
+            description="Plus de 100 villes. Tu choisis la tienne une fois, l’app s’en souvient."
+        />
+        <Card
+            icon={LucideSeparatorVertical}
+            title="Resto U’ et cafétérias"
+            description="Les cafétérias sont séparés des Resto U', pour une navigation plus clair entre les établissements"
+        />
+        <Card
+            icon={LucideClock}
+            title="Midi et soir"
+            description="Un onglet par service : tu sais ce qui t’attend avant même de t’y rendre"
+        />
+        <Card
+            icon={MaterialSymbolsWidgetsOutline}
+            title="Widget"
+            description="Le menu du jour sur ton écran d’accueil, sans même ouvrir l’app."
+        />
+        <Card
+            icon={LucideBadgeInfo}
+            title="Horaires et position"
+            description="Horaires, adresse, accès, moyens de paiement : tout ce qu’il faut savoir avant de partir."
+        />
+        <Card
+            icon={LucideSunMoon}
+            title="Thème sombre"
+            description="Une interface sombre qui ménage tes yeux le soir et reste lisible en pleine journée."
+        />
+    </div>
+</section>
+
+<style lang="scss">
+    h2 {
+        text-transform: uppercase;
+        letter-spacing: 1.1;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    h3 {
+        font-size: 48px;
+        font-weight: 800;
+        width: 640px;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        grid-column-gap: 24px;
+        grid-row-gap: 24px;
+
+        margin-top: 36px;
+    }
+</style>

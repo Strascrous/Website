@@ -2,17 +2,25 @@
 ---
 
 <nav>
-    <div class="right">
+    <div class="left">
         <img src="/logo.png" alt="Strascrous" />
         <h1>Strascrous<span class="highlight">.</span></h1>
     </div>
 
-    <div class="left">
+    <div class="right">
         <a href="#" class="download">Télécharger l'application</a>
         <a href="#features">Fonctionnalités</a>
         <a href="https://github.com/Strascrous">GitHub</a>
     </div>
 </nav>
+
+<script>
+    const nav = document.querySelector("nav");
+    const update = () => nav?.classList.toggle("scrolled", window.scrollY > 16);
+    update();
+
+    window.addEventListener("scroll", update, { passive: true });
+</script>
 
 <style lang="scss">
     nav {
@@ -24,15 +32,48 @@
         position: fixed;
         top: 32px;
         width: calc(80% - 24px * 2);
+        z-index: 100;
 
         background: $fg;
+        border: 1px solid transparent;
+
+        box-shadow: 6px 6px 4px 0  rgba(0, 0, 0, 0.15);
         border-radius: 48px;
         padding: 16px 24px;
+
+        transition:
+            top 0.3s ease,
+            padding 0.3s ease,
+            background-color 0.3s ease,
+            box-shadow 0.3s ease,
+            border-color 0.3s ease;
+
+        &.scrolled {
+            top: 16px;
+            padding: 10px 20px;
+            width: calc(80% - 20px * 2);
+
+            background: rgba($fg, 0.72);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border-color: rgba($fg, 0.5);
+            box-shadow: 0 8px 32px rgba(#2A1022, 0.35);
+
+            .left img {
+                height: 36px;
+                width: 36px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            &, .left img { transition: none; }
+        }
+
         *:not(.highlight) {
             color: $invert-fg;
         }
 
-        .right {
+        .left {
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -41,6 +82,7 @@
             img {
                 height: 48px;
                 width: 48px;
+                transition: height 0.3s ease, width 0.3s ease;
             }
 
             h1, h1 * {
@@ -51,7 +93,7 @@
             }
         }
 
-        .left {
+        .right {
             display: flex;
             align-items: center;
             flex-direction: row-reverse;

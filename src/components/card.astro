@@ -1,0 +1,45 @@
+---
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+
+interface Props {
+    icon: AstroComponentFactory;
+    title: string;
+    description: string;
+}
+
+const { icon: Icon, title, description } = Astro.props;
+---
+
+<div class="card">
+    <div class="icon"><Icon /></div>
+    <h3>{title}</h3>
+    <p>{description}</p>
+</div>
+
+<style lang="scss">
+    .card {
+        background: $fg;
+        border-radius: 28px;
+        padding: 32px;
+
+        display: flex;
+        flex-direction: column;
+
+        h3 {
+            margin-top: 12px;
+            color: $invert-fg;
+        }
+    }
+
+    .icon :global(svg) {
+        width: 36px;
+        height: 36px;
+        :global(*) {
+            color: $logo;
+        }
+    }
+
+    p {
+        color: $secondary-invert-fg;
+    }
+</style>
