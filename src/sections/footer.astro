@@ -1,0 +1,38 @@
+---
+---
+
+<footer>
+    <div class="inner">
+        <div class="left">
+            <p>&copy; 2026 Strascrous · Projet indépendant, non affilié au CROUS.</p>
+        </div>
+        <div class="right">
+            <a href="https://github.com/Strascrous/App" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+    </div>
+</footer>
+
+<style lang="scss">
+    @use "sass:color";
+
+    footer {
+        container-type: inline-size;
+        padding-bottom: 32px;
+    }
+
+    .inner {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        @container (max-width: 550px) {
+            flex-direction: column;
+            justify-content: start;
+            gap: 6px;
+        }
+    }
+
+    footer * {
+        color: color.change($fg, $alpha: .5);
+    }
+</style>

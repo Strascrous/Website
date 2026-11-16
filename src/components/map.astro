@@ -141,6 +141,7 @@ const featuredPoint = featured && {
 <style lang="scss">
     .map {
         margin: 0;
+        container-type: inline-size;
     }
 
     .canvas {
@@ -164,6 +165,7 @@ const featuredPoint = featured && {
     }
 
     .dots circle {
+        r: 6px;
         fill: $highlight;
         opacity: .85;
         transform-box: fill-box;
@@ -216,6 +218,26 @@ const featuredPoint = featured && {
         font-size: 30px;
         font-weight: 600;
         text-anchor: middle;
+    }
+
+    @container (max-width: 400px) {
+        .dots circle {
+            r: 9px;
+        }
+
+        .featured circle {
+            r: 16px;
+        }
+
+        .zone-labels text {
+            font-size: 36px;
+        }
+
+        .label {
+            margin-left: -12px;
+            padding: 3px 10px;
+            font-size: 12px;
+        }
     }
 
     @keyframes pop {

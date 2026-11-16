@@ -12,7 +12,7 @@ import Mockup from "../assets/mockup.png";
 
         <div class="actions">
             <a href="#">Télécharger l'application</a>
-            <a href="https://github.com/Strascrous/App">Voir sur GitHub</a>
+            <a href="https://github.com/Strascrous/App" target="_blank">Voir sur GitHub</a>
         </div>
     </div>
     <div class="right">
@@ -33,19 +33,20 @@ import Mockup from "../assets/mockup.png";
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
+        gap: 48px;
     }
 
     .left {
-        width: 650px;
+        flex: 0 1 650px;
+        min-width: 0;
 
         display: flex;
         flex-direction: column;
         gap: 35px;
 
         h2 {
-            --size: 86px;
-            font-size: var(--size);
-            line-height: var(--size);
+            font-size: clamp(56px, 6.5vw, 86px);
+            line-height: 1;
             font-weight: 800;
         }
 
@@ -56,6 +57,8 @@ import Mockup from "../assets/mockup.png";
 
             a {
                 padding: 12px 32px;
+                text-align: center;
+                white-space: nowrap;
                 text-decoration: none;
                 border-radius: 999px;
 
@@ -73,6 +76,7 @@ import Mockup from "../assets/mockup.png";
 
     .right {
         flex: 1;
+        min-width: 0;
         display: flex;
         justify-content: end;
         align-items: center;
@@ -104,6 +108,59 @@ import Mockup from "../assets/mockup.png";
             filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.45))
                 drop-shadow(0 0 25px rgba($highlight, 0.15));
             animation: float 6s ease-in-out infinite;
+        }
+    }
+
+    @media (max-width: 900px) {
+        section#hero {
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: stretch;
+            gap: 56px;
+            min-height: auto;
+            padding: 176px 0 64px;
+        }
+
+        .left {
+            flex: none;
+            gap: 28px;
+
+            h2 {
+                font-size: clamp(40px, 10vw, 72px);
+            }
+        }
+
+        .right {
+            justify-content: center;
+            top: 0;
+            right: 0;
+
+            &::before {
+                right: auto;
+                left: 50%;
+                width: min(70%, 320px);
+                transform: translateX(-50%);
+            }
+
+            img {
+                max-height: 60dvh;
+            }
+        }
+    }
+
+    @media (max-width: 600px) {
+        section#hero {
+            gap: 48px;
+            padding-top: 160px;
+        }
+
+        .left {
+            gap: 24px;
+
+            .actions {
+                flex-direction: column;
+                gap: 12px;
+            }
         }
     }
 

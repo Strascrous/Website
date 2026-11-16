@@ -8,8 +8,8 @@
     </div>
 
     <div class="right">
-        <a href="#" class="download">Télécharger l'application</a>
-        <a href="https://github.com/Strascrous">GitHub</a>
+        <a href="#" class="download">Télécharger <span>l'application</span></a>
+        <a href="https://github.com/Strascrous" target="_blank">GitHub</a>
         <a href="#faq">FAQ</a>
         <a href="#cities">Villes</a>
         <a href="#features">Fonctionnalités</a>
@@ -26,6 +26,8 @@
 
 <style lang="scss">
     nav {
+        container-type: inline-size;
+
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -107,7 +109,28 @@
                 background: $dark-fg;
                 padding: 10px 24px;
                 border-radius: 24px;
-                color: $fg;
+
+                &, span {
+                    color: $fg;
+                }
+            }
+        }
+
+        @container (max-width: 900px) {
+            a:not(.download) {
+                display: none;
+            }
+        }
+
+        @container (max-width: 550px) {
+            a.download span {
+                display: none;
+            }
+        }
+
+        @container (max-width: 450px) {
+            h1 {
+                display: none;
             }
         }
     }
