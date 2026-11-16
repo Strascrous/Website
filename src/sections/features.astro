@@ -5,6 +5,7 @@ import MaterialSymbolsWidgetsOutline from '~icons/material-symbols/widgets-outli
 import LucideBadgeInfo from '~icons/lucide/badge-info';
 import LucideSeparatorVertical from '~icons/lucide/separator-vertical';
 import LucideSunMoon from '~icons/lucide/sun-moon'
+import { cities } from '@strascrous/data';
 
 import Card from "../components/card.astro";
 
@@ -12,17 +13,17 @@ const features = [
     {
         icon: LucideMapPin,
         title: "Ta ville, ton resto",
-        description: "Plus de 100 villes. Tu choisis la tienne une fois, l’app s’en souvient."
+        description: `${cities.length} villes. Tu choisis la tienne une fois, l’app s’en souvient.`
     },
     {
         icon: LucideSeparatorVertical,
         title: "Resto U’ et cafétérias",
-        description: "Les cafétérias sont séparés des Resto U', pour une navigation plus clair entre les établissements"
+        description: "Les cafétérias sont séparés des Resto U', pour une navigation plus clair entre les établissements."
     },
     {
         icon: LucideClock,
         title: "Midi et soir",
-        description: "Un onglet par service : tu sais ce qui t’attend avant même de t’y rendre"
+        description: "Un onglet par service : tu sais ce qui t’attend avant même de t’y rendre."
     },
     {
         icon: MaterialSymbolsWidgetsOutline,

@@ -1,0 +1,209 @@
+---
+import LucidePlus from '~icons/lucide/plus';
+import { cities } from '@strascrous/data';
+
+const faq = [
+    {
+        question: "Strascrous, c’est quoi ?",
+        answer: "Une application qui rassemble les menus, les horaires et les infos pratiques des Resto U’ et des cafétérias. Tu choisis ta ville, ton établissement, et tu sais ce qu’il y a dans l’assiette avant de te déplacer."
+    },
+    {
+        question: "Ma ville est-elle disponible ?",
+        answer: `Très probablement : à partir du moment où il y a un CROUS dans ta ville, elle fonctionne sur Strascrous. Si tu ne la vois pas n'hésite pas à nous le signaler.`
+    },
+    {
+        question: "L’application est-elle gratuite ?",
+        answer: "Oui, entièrement. Pas d’abonnement, pas de publicité, et le code est open source."
+    },
+    {
+        question: "Est-ce une application officielle du Crous ?",
+        answer: "Non. Strascrous est un projet indépendant, sans lien avec les Crous : l’application se contente d’afficher les informations qu’ils publient."
+    },
+    {
+        question: "Je dois ouvrir l’app à chaque fois pour voir le menu ?",
+        answer: "Non : ajoute le widget à ton écran d’accueil et le menu du jour s’affiche tout seul, pour le service du midi comme celui du soir."
+    },
+    {
+        question: "J’ai trouvé un bug ou j’ai une idée, je fais quoi ?",
+        answer: `Deux possibilités : écris-nous à <a href="mailto:report@strascrous.fr">report@strascrous.fr</a>, ou, si tu es à l’aise avec GitHub, ouvre une issue sur <a href="https://github.com/Strascrous/App">GitHub</a>. Le projet est open source, les contributions sont les bienvenues.`
+    }
+];
+
+const schema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map(({ question, answer }) => ({
+        "@type": "Question",
+        name: question,
+        acceptedAnswer: {
+            "@type": "Answer",
+            text: answer.replace(/<[^>]+>/g, "")
+        }
+    }))
+};
+---
+
+<section id="faq">
+    <h2 class="highlight eyebrow">FAQ</h2>
+    <h3 class="tagline">Les questions qu’on nous pose souvent.</h3>
+
+    <div class="list">
+        {faq.map(({ question, answer }) => (
+            <details name="faq">
+                <summary>
+                    <span>{question}</span>
+                    <LucidePlus aria-hidden="true" />
+                </summary>
+                <p set:html={answer} />
+            </details>
+        ))}
+    </div>
+
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+</section>
+
+<script>
+    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!CSS.supports("interpolate-size", "allow-keywords") && !reducedMotion) {
+        const items = [...document.querySelectorAll<HTMLDetailsElement>("#faq details")];
+        const running = new WeakMap<HTMLDetailsElement, Animation>();
+
+        const toggle = (details: HTMLDetailsElement, open: boolean) => {
+            const from = details.offsetHeight;
+            running.get(details)?.cancel();
+
+            details.classList.toggle("closing", !open);
+            if (open) details.open = true;
+
+            const to = open
+                ? details.offsetHeight
+                : details.querySelector("summary")!.offsetHeight;
+
+            details.style.overflow = "clip";
+            const animation = details.animate(
+                { height: [`${from}px`, `${to}px`] },
+                { duration: 300, easing: "ease" }
+            );
+            running.set(details, animation);
+
+            animation.onfinish = () => {
+                if (!open) details.open = false;
+                details.classList.remove("closing");
+                details.style.overflow = "";
+                running.delete(details);
+            };
+        };
+
+        const isOpen = (details: HTMLDetailsElement) =>
+            details.open && !details.classList.contains("closing");
+
+        for (const details of items) {
+            // L'exclusivité est gérée ici, sinon le navigateur referme les autres sans animation.
+            details.removeAttribute("name");
+
+            details.querySelector("summary")!.addEventListener("click", (event) => {
+                event.preventDefault();
+
+                const opening = !isOpen(details);
+                if (opening) {
+                    items.filter((other) => other !== details && isOpen(other))
+                        .forEach((other) => toggle(other, false));
+                }
+                toggle(details, opening);
+            });
+        }
+    }
+</script>
+
+<style lang="scss">
+    .list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        margin-top: 36px;
+    }
+
+    details {
+        background: rgba(255, 255, 255, .08);
+        border-radius: 24px;
+        interpolate-size: allow-keywords;
+
+        transition: background-color .2s ease;
+
+        &:hover, &[open]:not(.closing) {
+            background: rgba(255, 255, 255, .12);
+        }
+
+        @supports (interpolate-size: allow-keywords) {
+            &::details-content {
+                block-size: 0;
+                overflow: clip;
+                transition:
+                    block-size .3s ease,
+                    content-visibility .3s allow-discrete;
+            }
+
+            &[open]::details-content {
+                block-size: auto;
+            }
+        }
+
+        &[open]:not(.closing) summary :global(svg) {
+            rotate: 45deg;
+        }
+    }
+
+    summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 24px;
+
+        padding: 24px 32px;
+        border-radius: 24px;
+        list-style: none;
+        cursor: pointer;
+
+        font-size: 20px;
+        font-weight: 600;
+
+        &::-webkit-details-marker {
+            display: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $highlight;
+            outline-offset: 2px;
+        }
+
+        :global(svg) {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            transition: rotate .3s ease;
+
+            :global(*) {
+                color: $highlight;
+            }
+        }
+    }
+
+    p {
+        max-width: 760px;
+        padding: 0 32px 24px;
+        line-height: 1.5;
+        opacity: .85;
+
+        :global(a) {
+            color: $highlight;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        details, details::details-content, summary :global(svg) {
+            transition: none;
+        }
+    }
+</style>
