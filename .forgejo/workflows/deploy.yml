@@ -17,6 +17,14 @@ jobs:
             cache: npm
         - name: Install Dependencies
           run: npm ci
+        # The runner's CPU has no AVX2, which the native Astro compiler binding requires
+        # (SIGILL / exit 132). Swap it for the WASI build: removing the native package makes
+        # @astrojs/compiler-binding fall back to @astrojs/compiler-binding-wasm32-wasi.
+        - name: Use WASI Astro compiler
+          run: |
+            v=$(node -p "require('@astrojs/compiler-binding/package.json').version")
+            npm install --no-save --force "@astrojs/compiler-binding-wasm32-wasi@$v"
+            rm -rf node_modules/@astrojs/compiler-binding-linux-x64-gnu
         - name: Build Website
           run: npm run build
         - name: Install SSH key
