@@ -10,16 +10,15 @@ jobs:
         runs-on: ubuntu-latest
         steps:
         - uses: https://code.forgejo.org/actions/checkout@v6
-        - name: Install Bun
-          run: |
-            curl -fsSL https://bun.sh/install | bash
-            echo "$HOME/.bun/bin" >> $GITHUB_PATH
-        - name: Check Bun
-          run: bun --version
+        - name: Setup Node
+          uses: https://github.com/actions/setup-node@v6
+          with:
+            node-version: lts/*
+            cache: npm
         - name: Install Dependencies
-          run: bun install
+          run: npm ci
         - name: Build Website
-          run: bun run build
+          run: npm run build
         - name: Install SSH key
           uses: https://github.com/shimataro/ssh-key-action@v2
           with:
